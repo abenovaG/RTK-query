@@ -1,56 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+import {useState} from "react";
+import { useGetTodosQuery} from "./redux/todosApi";
 
 function App() {
+    const [count, setCount] = useState('');
+    const {data = [], isLoading} = useGetTodosQuery(count);
+
+    if (isLoading) return <h1>Loading...</h1>
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+        <div>
+            <select value={count} onChange={(event) => setCount(event.target.value)}>
+                <option value="''">all</option>
+                <option value="3">3</option>
+                <option value="7">7</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+      <ul>
+          {data.map((item) =>  (
+              <li key={item.id}>
+                  {item.title}
+              </li>
+          )) }
+      </ul>
     </div>
   );
 }
